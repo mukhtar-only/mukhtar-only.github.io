@@ -1,31 +1,108 @@
-<!--=========================-!>
-Mau custom web ucapan online & tanpa watermark? Order Aja di Deka Tutorial !! (DM IG untuk order)
-+ Youtube: Deka Tutorial
-+ Tiktok: @deka_tutorial
-+ Instagram: deka_tutorial
-<-===========================-->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Special For You</title>
-    <script src="https://dekatutorial.github.io/flwr/s.js"></script>
-  </head>
-  <body>
-    <div class="open">
-      <i>❤️</i>
-      <span>Klik love nya</span>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #ffebee;
+        }
+        .open {
+            cursor: pointer;
+            font-size: 24px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .open i {
+            font-size: 40px;
+            color: red;
+        }
+        .message {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .buttons {
+            margin-top: 10px;
+        }
+        .buttons a {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+        }
+        .whatsapp { background: green; }
+        .telegram { background: blue; }
+    </style>
+</head>
+<body>
+
+    <div class="open" onclick="showMessage()">
+        <i>❤️</i>
+        <span>Klik love nya</span>
     </div>
 
-    <script>
-      ucapan = `hai
-      goodnight`;
-      musik = ``;
-      nomorWhatsapp = ``;
-      idTelegram = ``;
+    <div class="message">
+        <p id="ucapan"></p>
+        <div class="buttons">
+            <a id="whatsapp" class="whatsapp" href="#" target="_blank">WhatsApp</a>
+            <a id="telegram" class="telegram" href="#" target="_blank">Telegram</a>
+        </div>
+    </div>
 
-      DekaTutorial(ucapan, musik, nomorWhatsapp, idTelegram);
+    <audio id="musik" loop></audio>
+
+    <script>
+        // Konfigurasi ucapan, musik, dan kontak
+        let ucapan = `Hai! Goodnight 🌙✨`;
+        let musik = "";  // Masukkan link lagu, contoh: "musik.mp3"
+        let nomorWhatsapp = "";  // Masukkan nomor WhatsApp, contoh: "628XXXXXXXXXX"
+        let idTelegram = "";  // Masukkan ID Telegram, contoh: "username"
+
+        function showMessage() {
+            document.querySelector('.open').style.display = 'none';
+            document.querySelector('.message').style.display = 'block';
+            document.getElementById("ucapan").innerText = ucapan;
+
+            if (musik) {
+                let audio = document.getElementById("musik");
+                audio.src = musik;
+                audio.play();
+            }
+
+            if (nomorWhatsapp) {
+                document.getElementById("whatsapp").href = `https://wa.me/${nomorWhatsapp}`;
+            } else {
+                document.getElementById("whatsapp").style.display = "none";
+            }
+
+            if (idTelegram) {
+                document.getElementById("telegram").href = `https://t.me/${idTelegram}`;
+            } else {
+                document.getElementById("telegram").style.display = "none";
+            }
+        }
     </script>
-  </body>
+
+</body>
 </html>
