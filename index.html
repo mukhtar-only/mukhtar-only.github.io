@@ -19,6 +19,7 @@
             align-items: center;
             height: 100vh;
             background: #ffebee;
+            overflow: hidden;
         }
         .open {
             cursor: pointer;
@@ -27,6 +28,7 @@
             padding: 15px 20px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
         }
         .open i {
             font-size: 40px;
@@ -39,6 +41,7 @@
             background: white;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
         }
         .buttons {
             margin-top: 10px;
@@ -53,11 +56,39 @@
         }
         .whatsapp { background: green; }
         .telegram { background: blue; }
+
+        /* Kembang api */
+        .firework {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: yellow;
+            border-radius: 50%;
+            opacity: 0;
+            animation: explode 1s ease-out;
+        }
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+
+        /* Efek bunga jatuh */
+        .flower {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: url('https://i.ibb.co/ZJ8LP2x/flower.png') no-repeat center/contain;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-100px); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="open" onclick="showMessage()">
+    <div class="open" onclick="showMessage(event)">
         <i>❤️</i>
         <span>Klik love nya</span>
     </div>
@@ -74,23 +105,26 @@
 
     <script>
         // Konfigurasi ucapan, musik, dan kontak
-        let ucapan = `Hai! Goodnight mimpi indah
-        🌙✨`;
+        let ucapan = `Hai! Goodnight 🌙✨
+        mimpi indahh
+        mimpi akuuu`;
         let musik = "";  // Masukkan link lagu, contoh: "musik.mp3"
         let nomorWhatsapp = "";  // Masukkan nomor WhatsApp, contoh: "628XXXXXXXXXX"
         let idTelegram = "";  // Masukkan ID Telegram, contoh: "username"
 
-        function showMessage() {
+        function showMessage(event) {
             document.querySelector('.open').style.display = 'none';
             document.querySelector('.message').style.display = 'block';
             document.getElementById("ucapan").innerText = ucapan;
 
+            // Mainkan musik jika ada
             if (musik) {
                 let audio = document.getElementById("musik");
                 audio.src = musik;
                 audio.play();
             }
 
+            // Atur tombol WhatsApp & Telegram
             if (nomorWhatsapp) {
                 document.getElementById("whatsapp").href = `https://wa.me/${nomorWhatsapp}`;
             } else {
@@ -102,6 +136,49 @@
             } else {
                 document.getElementById("telegram").style.display = "none";
             }
+
+            // Efek kembang api
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => createFirework(event.clientX, event.clientY), i * 100);
+            }
+
+            // Efek bunga jatuh
+            setTimeout(() => {
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(createFlower, i * 500);
+                }
+            }, 2000);
+        }
+
+        // Fungsi membuat kembang api
+        function createFirework(x, y) {
+            let firework = document.createElement("div");
+            firework.classList.add("firework");
+            document.body.appendChild(firework);
+
+            firework.style.left = x + "px";
+            firework.style.top = y + "px";
+
+            setTimeout(() => {
+                firework.remove();
+            }, 1000);
+        }
+
+        // Fungsi membuat bunga jatuh
+        function createFlower() {
+            let flower = document.createElement("div");
+            flower.classList.add("flower");
+            document.body.appendChild(flower);
+
+            let startX = Math.random() * window.innerWidth;
+            let duration = 5 + Math.random() * 5;
+
+            flower.style.left = startX + "px";
+            flower.style.animationDuration = duration + "s";
+
+            setTimeout(() => {
+                flower.remove();
+            }, duration * 1000);
         }
     </script>
 
