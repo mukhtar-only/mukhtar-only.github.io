@@ -1,186 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Special For You</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: #ffebee;
-            overflow: hidden;
-        }
-        .open {
-            cursor: pointer;
-            font-size: 24px;
-            background: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            z-index: 10;
-        }
-        .open i {
-            font-size: 40px;
-            color: red;
-        }
-        .message {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            z-index: 10;
-        }
-        .buttons {
-            margin-top: 10px;
-        }
-        .buttons a {
-            display: inline-block;
-            margin: 5px;
-            padding: 10px 15px;
-            text-decoration: none;
-            color: white;
-            border-radius: 5px;
-        }
-        .whatsapp { background: green; }
-        .telegram { background: blue; }
+<html><body><pre>
+<span style="color: #FF4144;">int</span> numFlowers = 5;  <span style="color: #5E5E5E;">// Jumlah bunga dalam satu baris</span>
+<span style="color: #FF4144;">float</span> spacing;  <span style="color: #5E5E5E;">// Jarak antar bunga</span>
+Flower[]&nbsp;flowers;&nbsp;&nbsp;
 
-        /* Kembang api */
-        .firework {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: yellow;
-            border-radius: 50%;
-            opacity: 0;
-            animation: explode 1s ease-out;
-        }
-        @keyframes explode {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(4); opacity: 0; }
-        }
 
-        /* Efek bunga jatuh */
-        .flower {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            background: url('https://i.ibb.co/ZJ8LP2x/flower.png') no-repeat center/contain;
-            animation: fall linear infinite;
-        }
-        @keyframes fall {
-            0% { transform: translateY(-100px); opacity: 1; }
-            100% { transform: translateY(100vh); opacity: 0; }
-        }
-    </style>
-</head>
-<body>
+<span style="color: #B813C0;">void</span> <span style="color: #CE94F0;"><b>setup</b></span>() {
+&nbsp;&nbsp;<span style="color: #CE94F0;">size</span>(1366, 768);
+&nbsp;&nbsp;<span style="color: #CE94F0;">frameRate</span>(30);
+&nbsp;&nbsp;spacing&nbsp;=&nbsp;<span style="color: #CC3D92;">width</span> / (numFlowers + 1);  <span style="color: #5E5E5E;">// Hitung jarak antar bunga</span>
 
-    <div class="open" onclick="showMessage(event)">
-        <i>❤️</i>
-        <span>Klik love nya</span>
-    </div>
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: #5E5E5E;">// Inisialisasi bunga dengan sudut acak agar denyut tidak seragam</span>
+&nbsp;&nbsp;flowers&nbsp;=&nbsp;<span style="color: #B813C0;">new</span> Flower[numFlowers];  
+&nbsp;&nbsp;<span style="color: #00B068;">for</span> (<span style="color: #FF4144;">int</span> i = 0; i &lt; numFlowers; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #FF4144;">float</span> x = spacing * (i + 1);  
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #FF4144;">float</span> y = <span style="color: #CC3D92;">height</span> -300;  
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #FF4144;">float</span> petalSize = 50;
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #FF4144;">float</span> angle = <span style="color: #CE94F0;">random</span>(<span style="color: #CC3D92;">TWO_PI</span>);  <span style="color: #5E5E5E;">// Sudut acak untuk setiap bunga</span>
+&nbsp;&nbsp;&nbsp;&nbsp;flowers[i]&nbsp;=&nbsp;<span style="color: #B813C0;">new</span> Flower(x, y, petalSize, angle);
+&nbsp;&nbsp;}
+}
 
-    <div class="message">
-        <p id="ucapan"></p>
-        <div class="buttons">
-            <a id="whatsapp" class="whatsapp" href="#" target="_blank">WhatsApp</a>
-            <a id="telegram" class="telegram" href="#" target="_blank">Telegram</a>
-        </div>
-    </div>
+<span style="color: #B813C0;">void</span> <span style="color: #CE94F0;"><b>draw</b></span>() {
+&nbsp;&nbsp;<span style="color: #CE94F0;">background</span>(200, 240, 255);  <span style="color: #5E5E5E;">// Langit cerah</span>
 
-    <audio id="musik" loop></audio>
+&nbsp;&nbsp;<span style="color: #00B068;">for</span> (Flower f : flowers) {
+&nbsp;&nbsp;&nbsp;&nbsp;f.update();
+&nbsp;&nbsp;&nbsp;&nbsp;f.display();
+&nbsp;&nbsp;}
+}
 
-    <script>
-        // Konfigurasi ucapan, musik, dan kontak
-        let ucapan = `Hai! Goodnight 🌙✨
-        mimpi indahh
-        mimpi akuuu`;
-        let musik = "";  // Masukkan link lagu, contoh: "musik.mp3"
-        let nomorWhatsapp = "";  // Masukkan nomor WhatsApp, contoh: "628XXXXXXXXXX"
-        let idTelegram = "";  // Masukkan ID Telegram, contoh: "username"
+<span style="color: #B813C0;">class</span> Flower {
+&nbsp;&nbsp;<span style="color: #FF4144;">float</span> x, y, petalSize, angle;
+&nbsp;&nbsp;
+&nbsp;&nbsp;Flower(<span style="color: #FF4144;">float</span> x, <span style="color: #FF4144;">float</span> y, <span style="color: #FF4144;">float</span> petalSize, <span style="color: #FF4144;">float</span> angle) {
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #B813C0;">this</span>.x = x;
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #B813C0;">this</span>.y = y;
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #B813C0;">this</span>.petalSize = petalSize;
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #B813C0;">this</span>.angle = angle;  <span style="color: #5E5E5E;">// Setiap bunga punya sudut awal yang berbeda</span>
+&nbsp;&nbsp;}
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: #B813C0;">void</span> update() {
+&nbsp;&nbsp;&nbsp;&nbsp;angle&nbsp;+=&nbsp;0.1;&nbsp;&nbsp;<span style="color: #5E5E5E;">// Animasi denyutan unik untuk tiap bunga</span>
+&nbsp;&nbsp;}
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: #B813C0;">void</span> display() {
+&nbsp;&nbsp;&nbsp;&nbsp;drawStem(x,&nbsp;y);
+&nbsp;&nbsp;&nbsp;&nbsp;drawFlower(x,&nbsp;y,&nbsp;petalSize&nbsp;+&nbsp;5&nbsp;*&nbsp;<span style="color: #CE94F0;">sin</span>(angle));  <span style="color: #5E5E5E;">// Efek denyutan berbeda</span>
+&nbsp;&nbsp;}
+}
 
-        function showMessage(event) {
-            document.querySelector('.open').style.display = 'none';
-            document.querySelector('.message').style.display = 'block';
-            document.getElementById("ucapan").innerText = ucapan;
+<span style="color: #B813C0;">void</span> drawStem(<span style="color: #FF4144;">float</span> x, <span style="color: #FF4144;">float</span> y) {
+&nbsp;&nbsp;<span style="color: #CE94F0;">stroke</span>(50, 150, 50);
+&nbsp;&nbsp;<span style="color: #CE94F0;">strokeWeight</span>(6);
+&nbsp;&nbsp;<span style="color: #CE94F0;">line</span>(x, y, x, y + 400);  <span style="color: #5E5E5E;">// Batang</span>
 
-            // Mainkan musik jika ada
-            if (musik) {
-                let audio = document.getElementById("musik");
-                audio.src = musik;
-                audio.play();
-            }
+&nbsp;&nbsp;<span style="color: #CE94F0;">fill</span>(50, 200, 50);
+&nbsp;&nbsp;<span style="color: #CE94F0;">noStroke</span>();
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: #CE94F0;">ellipse</span>(x - 20, y + 120, 40, 10);  <span style="color: #5E5E5E;">// Daun kiri</span>
+&nbsp;&nbsp;<span style="color: #CE94F0;">ellipse</span>(x + 20, y + 90, 40, 10);  <span style="color: #5E5E5E;">// Daun kanan</span>
+}
 
-            // Atur tombol WhatsApp & Telegram
-            if (nomorWhatsapp) {
-                document.getElementById("whatsapp").href = `https://wa.me/${nomorWhatsapp}`;
-            } else {
-                document.getElementById("whatsapp").style.display = "none";
-            }
+<span style="color: #B813C0;">void</span> drawFlower(<span style="color: #FF4144;">float</span> x, <span style="color: #FF4144;">float</span> y, <span style="color: #FF4144;">float</span> petalSize) {
+&nbsp;&nbsp;<span style="color: #CE94F0;">fill</span>(255, 100, 100);
+&nbsp;&nbsp;<span style="color: #00B068;">for</span> (<span style="color: #FF4144;">int</span> i = 0; i &lt; 8; i++) {
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #FF4144;">float</span> a = <span style="color: #CC3D92;">TWO_PI</span> / 8 * i;
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #FF4144;">float</span> px = x + <span style="color: #CE94F0;">cos</span>(a) * petalSize;
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #FF4144;">float</span> py = y + <span style="color: #CE94F0;">sin</span>(a) * petalSize;
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #CE94F0;">ellipse</span>(px, py, petalSize, petalSize * 1.5);
+&nbsp;&nbsp;}
+&nbsp;&nbsp;
+&nbsp;&nbsp;<span style="color: #CE94F0;">fill</span>(255, 200, 0);
+&nbsp;&nbsp;<span style="color: #CE94F0;">ellipse</span>(x, y, 60, 60);  <span style="color: #5E5E5E;">// Pusat bunga</span>
+}
 
-            if (idTelegram) {
-                document.getElementById("telegram").href = `https://t.me/${idTelegram}`;
-            } else {
-                document.getElementById("telegram").style.display = "none";
-            }
-
-            // Efek kembang api
-            for (let i = 0; i < 10; i++) {
-                setTimeout(() => createFirework(event.clientX, event.clientY), i * 100);
-            }
-
-            // Efek bunga jatuh
-            setTimeout(() => {
-                for (let i = 0; i < 20; i++) {
-                    setTimeout(createFlower, i * 500);
-                }
-            }, 2000);
-        }
-
-        // Fungsi membuat kembang api
-        function createFirework(x, y) {
-            let firework = document.createElement("div");
-            firework.classList.add("firework");
-            document.body.appendChild(firework);
-
-            firework.style.left = x + "px";
-            firework.style.top = y + "px";
-
-            setTimeout(() => {
-                firework.remove();
-            }, 1000);
-        }
-
-        // Fungsi membuat bunga jatuh
-        function createFlower() {
-            let flower = document.createElement("div");
-            flower.classList.add("flower");
-            document.body.appendChild(flower);
-
-            let startX = Math.random() * window.innerWidth;
-            let duration = 5 + Math.random() * 5;
-
-            flower.style.left = startX + "px";
-            flower.style.animationDuration = duration + "s";
-
-            setTimeout(() => {
-                flower.remove();
-            }, duration * 1000);
-        }
-    </script>
-
-</body>
-</html>
+</pre></body></html>
